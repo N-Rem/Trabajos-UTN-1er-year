@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_TAM 2
+#define MAX_TAM 4
 
 int numerosID[MAX_TAM];
 float pesos[MAX_TAM];
@@ -12,12 +12,17 @@ void cargarEnvios(int *cargado);
 void mostrarEnvios(int cargado);
 void modificarEstadoDeUnEnvio(int cargado);
 void mostrarEnvioParaDestino(int destino, int cargado);
+void mostrar(int i);
+void mostrarEnviosEstados(int bool, int cargado);
+void mostrarMayorMenorPeso(int cargado, int bool);
+void mostrarEnviosMasMenosPesados(int cargado, int bool, int peso);
 
 void main()
 {
     int opcion = 0;
     int destino = 0;
     int envioCargado = 0;
+    int peso;
     do
     {
         printf("\n1- Cargar env%cos planificados.", 161);
@@ -29,12 +34,11 @@ void main()
         printf("\n7- Mostrar envío de mayor peso.");
         printf("\n8- Mostrar envío de menor peso.");
         printf("\n9- Mostrar envíos de mayor peso (más de un mayor)");
-        printf("\10- Mostrar envíos de menor peso (más de un menor)");
-        printf("\n11- Mostrar envíos despachados.");
+        printf("\n10- Mostrar envíos de menor peso (más de un menor)");
         printf("\n0- Salir.\n\n");
         scanf("%d", &opcion);
 
-        if (opcion != 5)
+        if (opcion != 0)
         {
             switch (opcion)
             {
@@ -66,44 +70,42 @@ void main()
 
                 break;
             case 5:
-                printf("Proximamente");
-
+                printf("\n\t----Lista de envios Pendientes---\n");
+                mostrarEnviosEstados(0, envioCargado);
                 break;
             case 6:
-                printf("Proximamente");
-
+                printf("\n\t---Lista de envios Despachados---\n");
+                mostrarEnviosEstados(1, envioCargado);
                 break;
             case 7:
-                printf("Proximamente");
-
+                printf("\nEnvio de mayor peso\n");
+                mostrarMayorMenorPeso(envioCargado, 1);
                 break;
             case 8:
-                printf("Proximamente");
-
+                printf("\nEnvio de menor peso\n");
+                mostrarMayorMenorPeso(envioCargado, 0);
                 break;
             case 9:
-                printf("Proximamente");
-            
-                break;
+                printf("\nDigite un peso para mostrar envios MAS pesados: \n");
+                scanf("%d", &peso);
+                mostrarEnviosMasMenosPesados(envioCargado, 1, peso);
+                    break;
             case 10:
-                printf("Proximamente");
-
-                break;
-            case 11:
-                printf("Proximamente");
-
+                printf("\nDigite un peso para mostrar envios MENOS pesados: \n");
+                scanf("%d", &peso);
+                mostrarEnviosMasMenosPesados(envioCargado, 0, peso);
                 break;
             case 0:
-                printf("Proximamente");
+                printf("\nHasta luego..\n");
 
                 break;
             default:
-                printf("La opci%cn ingresada es inv%clida\n", 162, 160);
+                printf("\nLa opci%cn ingresada es inv%clida\n", 62, 110);
             }
         }
 
     } while (opcion != 0);
-    printf("Fin del Progama.");
+    printf("\nFin del Progama.");
 }
 
 void cargarEnvios(int *cargado) // parametro cargado para verificar si se cargaron o no los envios.
@@ -153,44 +155,9 @@ void mostrarEnvios(int cargado)
     }
     else
     {
-        printf("-ID-\t-Peso kg-\t-Destino-\t-Hora-\t\t-Estado-\n");
         for (int i = 0; i < MAX_TAM; i++)
         {
-            printf("%d", numerosID[i]);
-            printf("\t%.2f \t", pesos[i]);
-            switch (destinos[i])
-            {
-            case 1:
-                printf("\tRosario\t");
-                break;
-            case 2:
-                printf("\tFunes\t");
-                break;
-            case 3:
-                printf("\tRoldan\t");
-                break;
-            case 4:
-                printf("\tBaigorria\t");
-                break;
-            default:
-                printf("\tDestino inv%clido\t", 160);
-            }
-
-            printf("\t%d hs\t", horasPlanificadas[i]);
-
-            switch (estados[i])
-            {
-            case 0:
-                printf("Pendiente");
-                break;
-            case 1:
-                printf("Despachado");
-                break;
-            default:
-                printf("Estado inv%clido\n", 160);
-            }
-
-            printf("\n");
+            mostrar(i);
         }
     }
 }
@@ -236,42 +203,127 @@ void mostrarEnvioParaDestino(int destino, int cargado)
         {
             if (destinos[i] == destino)
             {
-                printf("%d", numerosID[i]);
-                printf("\t%.2f \t", pesos[i]);
-                switch (destinos[i])
-                {
-                case 1:
-                    printf("\tRosario\t");
-                    break;
-                case 2:
-                    printf("\tFunes\t");
-                    break;
-                case 3:
-                    printf("\tRoldan\t");
-                    break;
-                case 4:
-                    printf("\tBaigorria\t");
-                    break;
-                default:
-                    printf("\tDestino inv%clido\t", 160);
-                }
-
-                printf("\t%d hs\t", horasPlanificadas[i]);
-
-                switch (estados[i])
-                {
-                case 0:
-                    printf("Pendiente");
-                    break;
-                case 1:
-                    printf("Despachado");
-                    break;
-                default:
-                    printf("Estado inv%clido\n", 160);
-                }
-
-                printf("\n");
+                mostrar(i);
             }
         }
     }
 }
+
+void mostrarEnviosEstados(int bool, int cargado)
+{
+    if (cargado == 0)
+    {
+        printf("Usted no cargo los datos debidamente");
+    }
+    else
+    {
+        for (int i = 0; i < MAX_TAM; i++)
+        {
+            if (estados[i] == 0 & bool == 0)
+            {
+                mostrar(i);
+            }
+            else if (bool == 1 && estados[i] == 1)
+            {
+                mostrar(i);
+            }
+        }
+    }
+}
+
+void mostrar(int i)
+{
+    printf("-ID-\t-Peso kg-\t-Destino-\t-Hora-\t\t-Estado-\n");
+    printf("%d", numerosID[i]);
+    printf("\t%.2f \t", pesos[i]);
+    switch (destinos[i])
+    {
+    case 1:
+        printf("\tRosario\t");
+        break;
+    case 2:
+        printf("\tFunes\t");
+        break;
+    case 3:
+        printf("\tRoldan\t");
+        break;
+    case 4:
+        printf("\tBaigorria\t");
+        break;
+    default:
+        printf("\tDestino inv%clido\t", 160);
+    }
+
+    printf("\t%d hs\t", horasPlanificadas[i]);
+
+    switch (estados[i])
+    {
+    case 0:
+        printf("Pendiente");
+        break;
+    case 1:
+        printf("Despachado");
+        break;
+    }
+
+    printf("\n");
+}
+
+void mostrarMayorMenorPeso(int cargado, int bool)
+{
+    if (cargado == 0)
+    {
+        printf("Usted no cargo los datos debidamente");
+    }
+    else
+    {
+        int indMayor, indMenor;
+        float pesoMayor = 0, pesoMenor = pesos[0];
+        for (int i = 0; i < MAX_TAM; i++)
+        {
+            if (pesoMayor < pesos[i])
+            {
+                pesoMayor = pesos[i];
+                indMayor = i;
+            }
+            if (pesoMenor > pesos[i])
+            {
+                pesoMenor = pesos[i];
+                indMenor = i;
+            }
+        }
+        if (bool == 1)
+        {
+            mostrar(indMayor);
+        }
+        else if (bool == 0)
+        {
+            mostrar(indMenor);
+        }
+    }
+}
+
+void mostrarEnviosMasMenosPesados(int cargado, int bool, int peso)
+{
+
+    if (cargado == 0)
+    {
+        printf("Usted no cargo los datos debidamente");
+    }
+    else
+    {
+        for (int i = 0; i < MAX_TAM; i++)
+        {
+            if (bool == 0 && pesos[i] < peso)
+            {
+                mostrar(i);
+            }
+            else if (bool == 1 && pesos[i] > peso)
+            {
+                mostrar(i);
+            }
+        }
+    }
+}
+
+
