@@ -19,13 +19,25 @@ struct Producto
     char descripcion[CHAR_MAX];
 };
 
+struct Venta
+{
+    long int dni;
+    int desc;
+    int codigo;
+    int cant;
+    float total;
+};
+
+
 void cargarProducto(struct Producto p[]);
 
 int main()
 {
-    int opcion=0;
+    int opcion=0, vent;
+    vent=1;
     struct Producto productos[CANT_MAX];
     cargarProducto(productos);
+    struct Venta ventas[vent];
     do
     {
         printf("\n\t\tSelecione las siguientes opciones: \n 1. Registrar Ventas.\n 2. Ver listado de productos ordenados por descripcion.\n 3. Ver Resumen del dia.\n 4. Salir.\n");
@@ -35,12 +47,6 @@ int main()
 
 
     } while (opcion != 4);
-    
-    
-
-
-
-
     return 0;
 }
 
