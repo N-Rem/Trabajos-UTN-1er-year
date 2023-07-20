@@ -28,13 +28,13 @@ int main()
     cargarProducto(productos);
     do
     {
-        printf("\n\t\tSelecione las siguientes opciones: \n 1. Registrar Ventas.\n 2. Ver listado de productos ordenados por descripcion.\n 3. Ver Resumen del dia.\n 4. Salir.");
+        printf("\n\t\tSelecione las siguientes opciones: \n 1. Registrar Ventas.\n 2. Ver listado de productos ordenados por descripcion.\n 3. Ver Resumen del dia.\n 4. Salir.\n");
         scanf("%d", &opcion);
 
 
 
 
-    } while (opcion == 4);
+    } while (opcion != 4);
     
     
 
@@ -53,11 +53,11 @@ void cargarProducto(struct Producto p[])
     strcpy(p[0].descripcion, "Mantel 2x2");
     p[1].codigo =2;
     p[1].precio =800.99;
-    p[1].descripcion[CHAR_MAX] = "Plat playo 24cm";
+    strcpy(p[1].descripcion,"Plat playo 24cm");
     p[2].codigo =03;
     p[2].precio =1450.50;
-    p[2].descripcion[CHAR_MAX] = "Copa vino";
+    strcpy(p[2].descripcion,"Copa vino");
     p[3].codigo =04;
     p[3].precio =650.50;
-    p[3].descripcion[CHAR_MAX] = "Plato hondo 22cm";
+    strcpy(p[3].descripcion,"Plato hondo 22cm");
 }
