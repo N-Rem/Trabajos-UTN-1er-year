@@ -3,11 +3,10 @@
 #include <string.h>
 #include <strings.h>
 
-#define efectivo 0.15
-#define debito 0.10
-#define credito 0
-#define iva 1.21
-#define descuentos [] { efectivo, debito, credito }
+#define EFECTIVO 0.85
+#define DEBITO 0.90
+#define CREDITO 1
+#define IVA 1.21
 
 #define CANT_MAX 4
 #define CHAR_MAX 100
@@ -21,17 +20,21 @@ struct Producto
 struct Venta
 {
     long int dni;
-    int desc;
+    float desc;
     int codigo;
     int cant;
     float total;
 };
 
 void cargarProducto(struct Producto p[]);
-void registrarVenta(struct Venta v[], int cantVent);
-void mostrarProductos(struct Producto p[]);
 
-void mostrarVentas(struct Venta v[], int cantVent);
+void registrarVenta(struct Venta v[], int numVent, struct Producto p[]);
+int buscarIndice(int codigo, struct Producto p[]);
+
+void mostrarProductos(struct Producto p[]);
+void resumenDelDia(struct Venta v[], int numVent);
+// array Global--
+float DESCUENTO[3] = {EFECTIVO, EFECTIVO, CREDITO};
 
 int main()
 {
@@ -47,7 +50,7 @@ int main()
         {
         case 1:
             printf("\n\t-Ingreso de Ventas-");
-            registrarVenta(ventas, vent);
+            registrarVenta(ventas, vent, productos);
             vent++;
             break;
         case 2:
@@ -56,7 +59,7 @@ int main()
             break;
         case 3:
             printf("\nResumen Del Dia: ");
-            mostrarVentas(ventas, vent);
+            resumenDelDia(ventas, vent);
             break;
         case 4:
             printf("\n\tFin del progama.\n Gracias...");
@@ -73,7 +76,6 @@ void cargarProducto(struct Producto p[])
 {
     p[0].codigo = 1;
     p[0].precio = 3500.00;
-    // p[0].descripcion[CHAR_MAX] = "Mantel 2x2";
     strcpy(p[0].descripcion, "Mantel 2x2");
     p[1].codigo = 2;
     p[1].precio = 800.99;
@@ -86,35 +88,52 @@ void cargarProducto(struct Producto p[])
     strcpy(p[3].descripcion, "Plato hondo 22cm");
 }
 
-void registrarVenta(struct Venta v[], int cantVent)
+void registrarVenta(struct Venta v[], int numVent, struct Producto p[])
 {
-    int descuento;
+    int des, ind;
+    float totalFinal;
+
     printf("\n\tIngrese el DNI: ");
-    scanf("%ld", &v[cantVent ].dni);
-
+    scanf("%ld", &v[numVent].dni);
     printf("\n\tIngrese medio de pago. \n.1Efectivo\n.2Debito\n.3Credito\n");
-    scanf("%d", &descuento);
-    v[cantVent ].desc = descuento - 1;
-
+    scanf("%d", &des);
+    v[numVent].desc = DESCUENTO[des - 1];
     printf("\n\tIngrese el codigo: ");
-    scanf("%d", &v[cantVent ].codigo);
-
+    scanf("%d", &v[numVent].codigo);
     printf("\n\tIngrese la cantidad: ");
-    scanf("%d", &v[cantVent ].cant);
+    scanf("%d", &v[numVent].cant);
+
+    ind = buscarIndice(v[numVent].codigo, p);
+    totalFinal = (v[numVent].cant * p[ind].precio) * v[numVent].desc*IVA;
+    v[numVent].total = totalFinal;
+}
+int buscarIndice(int codigo, struct Producto p[])
+{
+    for (int i = 0; i < CANT_MAX; i++)
+    {
+        if (codigo == p[i].codigo)
+        {
+            return i;
+            break;
+        }
+    }
 }
 
-void mostrarProductos(struct Producto p[]){
+void mostrarProductos(struct Producto p[])
+{
     printf("\nCodigo\t\tPrecio\t\t\tDescipcion.");
     for (int i = 0; i < CANT_MAX; i++)
     {
-        printf("\n%d\t\t%.2f\t\t\t%s\n",p[i].codigo,p[i].precio,p[i].descripcion);
+        printf("\n%d\t\t%.2f\t\t\t%s\n", p[i].codigo, p[i].precio, p[i].descripcion);
     }
 }
 
-void mostrarVentas(struct Venta v[], int cantVent){
-    for (int i = 0; i < cantVent; i++)
+void resumenDelDia(struct Venta v[], int numVent)
+{
+    for (int i = 0; i < numVent; i++)
     {
-        printf ("\ndei %ld - desc %d - codigo %d - cant %d\n",v[i].dni, v[i].desc, v[i].codigo, v[i].cant);
+        printf("\nDNI: %ld \nPorsentaje de Descuento %.2f %% \nCodigo Producto %d \nCantidad Pedida: %d\nTotal: %.2f", v[i].dni, v[i].desc, v[i].codigo, v[i].cant, v[i].total);
     }
-    
 }
+
+
