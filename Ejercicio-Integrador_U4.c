@@ -3,9 +3,9 @@
 #include <string.h>
 #include <strings.h>
 
-#define EFECTIVO 0.85
-#define DEBITO 0.90
-#define CREDITO 1
+#define EFECTIVO 0.15
+#define DEBITO 0.10
+#define CREDITO 0
 #define IVA 1.21
 
 #define CANT_MAX 4
@@ -91,7 +91,7 @@ void cargarProducto(struct Producto p[])
 void registrarVenta(struct Venta v[], int numVent, struct Producto p[])
 {
     int des, ind;
-    float totalFinal;
+    float totalFinal,quinse=0.85,diez=0.10,cero=1;
 
     printf("\n\tIngrese el DNI: ");
     scanf("%ld", &v[numVent].dni);
@@ -104,7 +104,21 @@ void registrarVenta(struct Venta v[], int numVent, struct Producto p[])
     scanf("%d", &v[numVent].cant);
 
     ind = buscarIndice(v[numVent].codigo, p);
-    totalFinal = (v[numVent].cant * p[ind].precio) * v[numVent].desc*IVA;
+    totalFinal = (v[numVent].cant * p[ind].precio) * IVA;
+    switch (des - 1)
+    {
+    case 0:
+        totalFinal *= quinse;
+        break;
+    case 1:
+        totalFinal *= diez;
+        break;
+    case 2:
+        totalFinal *= cero;
+        break;
+    default:
+        break;
+    }
     v[numVent].total = totalFinal;
 }
 int buscarIndice(int codigo, struct Producto p[])
@@ -135,5 +149,3 @@ void resumenDelDia(struct Venta v[], int numVent)
         printf("\nDNI: %ld \nPorsentaje de Descuento %.2f %% \nCodigo Producto %d \nCantidad Pedida: %d\nTotal: %.2f", v[i].dni, v[i].desc, v[i].codigo, v[i].cant, v[i].total);
     }
 }
-
-
