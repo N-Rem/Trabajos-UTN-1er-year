@@ -9,7 +9,7 @@
 #define iva 1.21
 #define descuentos [] { efectivo, debito, credito }
 
-#define CANT_MAX 10
+#define CANT_MAX 4
 #define CHAR_MAX 100
 struct Producto
 {
@@ -29,10 +29,13 @@ struct Venta
 
 void cargarProducto(struct Producto p[]);
 void registrarVenta(struct Venta v[], int cantVent);
+void mostrarProductos(struct Producto p[]);
+
+void mostrarVentas(struct Venta v[], int cantVent);
 
 int main()
 {
-    int opcion = 0, vent = 1;
+    int opcion = 0, vent = 0;
     struct Producto productos[CANT_MAX];
     cargarProducto(productos);
     struct Venta ventas[vent];
@@ -43,15 +46,17 @@ int main()
         switch (opcion)
         {
         case 1:
-            printf("-Ingreso de Ventas-");
+            printf("\n\t-Ingreso de Ventas-");
             registrarVenta(ventas, vent);
             vent++;
             break;
         case 2:
-            printf("Proximamente");
+            printf("\n\tListados de productos\n\t");
+            mostrarProductos(productos);
             break;
         case 3:
             printf("\nResumen Del Dia: ");
+            mostrarVentas(ventas, vent);
             break;
         case 4:
             printf("\n\tFin del progama.\n Gracias...");
@@ -66,7 +71,6 @@ int main()
 
 void cargarProducto(struct Producto p[])
 {
-
     p[0].codigo = 1;
     p[0].precio = 3500.00;
     // p[0].descripcion[CHAR_MAX] = "Mantel 2x2";
@@ -86,16 +90,31 @@ void registrarVenta(struct Venta v[], int cantVent)
 {
     int descuento;
     printf("\n\tIngrese el DNI: ");
-    scanf("%ld", &v[cantVent - 1].dni);
+    scanf("%ld", &v[cantVent ].dni);
 
     printf("\n\tIngrese medio de pago. \n.1Efectivo\n.2Debito\n.3Credito\n");
     scanf("%d", &descuento);
-    v[cantVent - 1].desc = descuento - 1;
+    v[cantVent ].desc = descuento - 1;
 
     printf("\n\tIngrese el codigo: ");
-    scanf("%d", &v[cantVent - 1].codigo);
+    scanf("%d", &v[cantVent ].codigo);
 
     printf("\n\tIngrese la cantidad: ");
-    scanf("%d", &v[cantVent - 1].cant);
+    scanf("%d", &v[cantVent ].cant);
+}
 
+void mostrarProductos(struct Producto p[]){
+    printf("\nCodigo\t\tPrecio\t\t\tDescipcion.");
+    for (int i = 0; i < CANT_MAX; i++)
+    {
+        printf("\n%d\t\t%.2f\t\t\t%s\n",p[i].codigo,p[i].precio,p[i].descripcion);
+    }
+}
+
+void mostrarVentas(struct Venta v[], int cantVent){
+    for (int i = 0; i < cantVent; i++)
+    {
+        printf ("\ndei %ld - desc %d - codigo %d - cant %d\n",v[i].dni, v[i].desc, v[i].codigo, v[i].cant);
+    }
+    
 }
