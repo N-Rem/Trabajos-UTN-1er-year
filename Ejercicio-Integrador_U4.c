@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-
 #define EFECTIVO 0.15
 #define DEBITO 0.10
 #define CREDITO 0
@@ -17,7 +16,6 @@ struct Producto
     float precio;
     char descripcion[CHAR_MAX];
 };
-
 struct Venta
 {
     long int dni;
@@ -39,7 +37,6 @@ int validaCantidad(int v);
 void mostrarProductos(struct Producto p[]);
 void resumenDelDia(struct Venta v[], int numVent);
 int validaVenta(int numVenta);
-
 // array Global--
 float DESCUENTO[3] = {EFECTIVO, EFECTIVO, CREDITO};
 
