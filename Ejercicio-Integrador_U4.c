@@ -30,9 +30,14 @@ void cargarProducto(struct Producto p[]);
 
 void registrarVenta(struct Venta v[], int numVent, struct Producto p[]);
 int buscarIndice(int codigo, struct Producto p[]);
+int validaDni(long int v);
+int validaCodigo(int v);
+int validaPago(int v);
+int validaCantidad(int v);
 
 void mostrarProductos(struct Producto p[]);
 void resumenDelDia(struct Venta v[], int numVent);
+
 // array Global--
 float DESCUENTO[3] = {EFECTIVO, EFECTIVO, CREDITO};
 
@@ -74,10 +79,10 @@ int main()
 
 void cargarProducto(struct Producto p[])
 {
-    p[0].codigo = 1;
+    p[0].codigo = 01;
     p[0].precio = 3500.00;
     strcpy(p[0].descripcion, "Mantel 2x2");
-    p[1].codigo = 2;
+    p[1].codigo = 02;
     p[1].precio = 800.99;
     strcpy(p[1].descripcion, "Plat playo 24cm");
     p[2].codigo = 03;
@@ -90,18 +95,49 @@ void cargarProducto(struct Producto p[])
 
 void registrarVenta(struct Venta v[], int numVent, struct Producto p[])
 {
-    int des, ind;
-    float totalFinal,quinse=0.85,diez=0.10,cero=1;
+    int des, ind, valido;
+    float totalFinal, quinse = 0.85, diez = 0.10, cero = 1;
 
-    printf("\n\tIngrese el DNI: ");
+    printf("\nIngrese el DNI: ");
     scanf("%ld", &v[numVent].dni);
+    valido = validaDni(v[numVent].dni);
+    while (valido != 0)
+    {
+        printf("\n\tDNI mal ingresado, Vuelva a intentarlo: ");
+        scanf("%ld", &v[numVent].dni);
+        valido = validaDni(v[numVent].dni);
+    }
+
     printf("\n\tIngrese medio de pago. \n.1Efectivo\n.2Debito\n.3Credito\n");
     scanf("%d", &des);
+    valido = validaPago(des);
+    while (valido != 0)
+    {
+        printf("\n\tMedio de Pago mal ingresado, Vuelva a intentarlo: ");
+        scanf("%d", &des);
+        valido = validaPago(des);
+    }
     v[numVent].desc = DESCUENTO[des - 1];
-    printf("\n\tIngrese el codigo: ");
+
+    printf("\nIngrese el codigo: ");
     scanf("%d", &v[numVent].codigo);
-    printf("\n\tIngrese la cantidad: ");
+    valido = validaCodigo(v[numVent].codigo);
+    while (valido != 0)
+    {
+        printf("\n\tCodigo mal ingresado, Vuelva a intentarlo: ");
+        scanf("%d", &v[numVent].codigo);
+        valido = validaCodigo(v[numVent].codigo);
+    }
+
+    printf("\nIngrese la cantidad: ");
     scanf("%d", &v[numVent].cant);
+    valido = validaCantidad(v[numVent].cant);
+    while (valido != 0)
+    {
+        printf("\n\tla Cantidad debe ser mayor a 0, Vuelva a intentarlo: ");
+        scanf("%d", &v[numVent].cant);
+        valido = validaCantidad(v[numVent].cant);
+    }
 
     ind = buscarIndice(v[numVent].codigo, p);
     totalFinal = (v[numVent].cant * p[ind].precio) * IVA;
@@ -130,6 +166,50 @@ int buscarIndice(int codigo, struct Producto p[])
             return i;
             break;
         }
+    }
+}
+int validaDni(long int v)
+{
+    if (v < 10000000 || v > 99999999)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+int validaCodigo(int v)
+{
+    if (v < 1 || v > 4)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+int validaPago(int v)
+{
+    if (v < 1 || v > 3)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+int validaCantidad(int v)
+{
+    if (v <= 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
     }
 }
 
