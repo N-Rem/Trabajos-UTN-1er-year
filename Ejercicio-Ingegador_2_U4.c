@@ -1,9 +1,35 @@
 #include <stdio.h>
 #include <string.h>
+#define MAX_CHAR 100
+#define MAX_SEGUROS 4;
+#define MAX_CLIENT 9999;
+struct SegurosA
+{
+    char automotor[MAX_CHAR];
+    float cuotaAuto;
+};
+struct SeguroH
+{
+    char hogar[MAX_CHAR];
+    float cuotaHogar;
+};
+
+struct Cliente
+{
+    char nameLastname[MAX_CHAR]; 
+    long int dni; 
+    char tipoSeguro[MAX_CHAR];
+    float montoAsegurar; 
+    char debitoAuto [MAX_CHAR];
+};
+
 
 int main()
 {
-    int opcion = 0;
+    int opcion = 0, client=0;
+    //!Funcion que agrega los seguros de la compania;
+
+
 
     while (opcion != 4)
     {
