@@ -24,7 +24,7 @@ void mostrarEmpleados(struct Empleado empleados[]);
 int comprobarExistencia(struct Empleado emp[], int legajo);
 int buscarEmpleado(struct Empleado emp[], int legajo);
 int calcularSueldo(struct Empleado emp[], int ind);
-void mostrarSueldo(struct Empleado emp[], int legajo); //!puedo poner emp porque es irrelebante el nombre, si es importante el tipo (estruc) y el nombre del padre.
+void mostrarSueldo(struct Empleado emp[], int legajo); //! puedo poner emp porque es irrelebante el nombre, si es importante el tipo (estruc) y el nombre del padre.
 
 void cambiarCategoria(struct Empleado emp[], int legajo);
 
@@ -53,7 +53,7 @@ int main()
             }
             else
             {
-                printf("Primero Cage los Empelados.");
+                printf("\nPrimero Cargue los Empelados.\n");
             }
             break;
         case 3:
@@ -65,7 +65,7 @@ int main()
             }
             else
             {
-                printf("Primero Cage los Empelados.");
+                printf("\nPrimero Cargue los Empelados.\n");
             }
             break;
         case 4:
@@ -77,7 +77,7 @@ int main()
             }
             else
             {
-                printf("Primero Cage los Empelados.");
+                printf("\nPrimero Cargue los Empelados.\n");
             }
             break;
         case 5:
@@ -85,7 +85,7 @@ int main()
             break;
 
         default:
-            printf("Opcion incorrecta, vuelva a intentarlo.");
+            printf("\nOpcion incorrecta, vuelva a intentarlo.");
             break;
         }
     }
@@ -99,9 +99,10 @@ void cargarEmpleados(struct Empleado empleados[], int *carga)
         printf("\nDigite el legajo del empleado Numero %d:  ", i + 1);
         scanf("%d", &empleados[i].legajo);
         valido = validarLegajo(empleados[i].legajo);
+
         while (valido == 0)
         {
-            printf("\nEl legajo debe estar entre 10000 y 99999. Vuelvalo a intentar: ");
+            printf("\nEl legajo debe estar entre 10000 y 99999. Vuelva a intentar: ");
             scanf("%d", &empleados[i].legajo);
             valido = validarLegajo(empleados[i].legajo);
         }
@@ -140,6 +141,7 @@ int validarLegajo(int legajo)
     int min, max;
     max = 99999;
     min = 10000;
+
     if (legajo > max || legajo < min)
     {
         return 0;
@@ -283,6 +285,3 @@ void cambiarCategoria(struct Empleado emp[], int legajo)
         printf("El legajo no existe.");
     }
 }
-
-//!me gustaria poder hacer una validacion para que el int solo acepte numeros
-//!y otra validacion para que no acpete 2 legajos etc iguales;
