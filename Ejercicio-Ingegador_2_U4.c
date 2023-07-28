@@ -187,7 +187,7 @@ void agregaCliente(struct Cliente client[], int c, struct Seguros a[], struct Se
     while (valido == 0)
     {
         printf("\n\tOpcion invalida, Vuelva a intentarlo: ");
-        getchar();
+        //getchar();//?Esto genera un bucle infinito?...
         fgets(client[c].debitoAuto, MAX_CHAR, stdin);
         client[c].debitoAuto[strcspn(client[c].debitoAuto, " \n")] = '\0';
         valido = validaDebAuto(client[c].debitoAuto);
