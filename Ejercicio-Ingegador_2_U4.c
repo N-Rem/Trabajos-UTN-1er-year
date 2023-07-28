@@ -37,14 +37,18 @@ void buscarCliente(struct Cliente client[], int max);
 int compruebaDni(struct Cliente c[], int max, long int dni);
 int buscarDni(struct Cliente c[], int max, long int dni);
 void imprimeClientes(struct Cliente c[], int i);
+
+int validaDni(long int dni);
+int validaTipoSeguro(int tipo);
+int validaMonto(float monto);
+int validaDebAuto(char resp[]);
+
 int main()
 {
     struct Seguros automotor[MAX_SEGUROS];
     struct Seguros hogar[MAX_SEGUROS];
     struct Cliente clientes[MAX_CLIENT];
     creaSeguros(automotor, hogar);
-    mostrarSeguros(automotor, hogar);
-
     int opcion = 0,
         client = 0;
     while (opcion != 4)
@@ -125,10 +129,24 @@ void agregaCliente(struct Cliente client[], int c, struct Seguros a[], struct Se
 
     printf("\nIngrese el DNI del nuevo Cliente: ");
     scanf("%ld", &client[c].dni);
+    valido = validaDni(client[c].dni);
+    while (valido == 0)
+    {
+        printf("\n\tEl DNI es invalido, Intente de nuevo: ");
+        scanf("%ld", &client[c].dni);
+        valido = validaDni(client[c].dni);
+    }
 
     printf("\nSelecciones el tipo de seguro\n\t");
     mostrarSeguros(a, h);
     scanf("%d", &client[c].tipoSeguro);
+    valido = validaTipoSeguro(client[c].tipoSeguro);
+    while (valido == 0)
+    {
+        printf("\n\tOpcion invalida, Intente de nuevo: ");
+        scanf("%d", &client[c].tipoSeguro);
+        valido = validaTipoSeguro(client[c].tipoSeguro);
+    }
 
     switch (client[c].tipoSeguro)
     {
@@ -153,11 +171,28 @@ void agregaCliente(struct Cliente client[], int c, struct Seguros a[], struct Se
     }
     printf("Ingrese el monto a asegurar:\t");
     scanf("%f", &client[c].montoAsegurar);
+    valido = validaMonto(client[c].montoAsegurar);
+    while (valido == 0)
+    {
+        printf("\n\tMonto invalido, Intente de nuevo: ");
+        scanf("%f", &client[c].montoAsegurar);
+        valido = validaMonto(client[c].montoAsegurar);
+    }
 
     printf("Elige Debito automatico: Si/No\t");
     getchar();
     fgets(client[c].debitoAuto, MAX_CHAR, stdin);
     client[c].debitoAuto[strcspn(client[c].debitoAuto, " \n")] = '\0';
+    valido = validaDebAuto(client[c].debitoAuto);
+    while (valido == 0)
+    {
+        printf("\n\tOpcion invalida, Vuelva a intentarlo: ");
+        getchar();
+        fgets(client[c].debitoAuto, MAX_CHAR, stdin);
+        client[c].debitoAuto[strcspn(client[c].debitoAuto, " \n")] = '\0';
+        valido = validaDebAuto(client[c].debitoAuto);
+    }
+
     // CALCULAR cuota mensual:
     if (client[c].tipoSeguro > 3)
     {
@@ -176,6 +211,41 @@ void agregaCliente(struct Cliente client[], int c, struct Seguros a[], struct Se
     client[c].cuotaMenusal = cuotaFinal;
 
     printf("\nAcegurado Registrado...\n\n");
+}
+int validaDni(long int dni)
+{
+    long int min = 10000000, max = 99999999;
+    if (dni < min || dni > max)
+    {
+        return 0;
+    }
+    return 1;
+}
+int validaTipoSeguro(int tipo)
+{
+    int min = 1, max = 6;
+    if (tipo < 1 || tipo > max)
+    {
+        return 0;
+    }
+    return 1;
+}
+int validaMonto(float monto)
+{
+    float min = 1;
+    if (monto < min)
+    {
+        return 0;
+    }
+    return 1;
+}
+int validaDebAuto(char resp[])
+{
+    if (strcmp(resp, "Si") == 0 || strcmp(resp, "No") == 0)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 void mostrarSeguros(struct Seguros a[], struct Seguros h[])
@@ -317,6 +387,5 @@ void imprimeClientes(struct Cliente c[], int i)
         strcpy(tipoSeguro, "Tercero Basico");
         break;
     }
-    printf("%s\t%ld\t\t%s\t\t%s\t\t\t%.2f\n", c[i].nameLastname, c[i].dni, tipoSeguro, c[i].debitoAuto, c[i].cuotaMenusal);
+    printf("%s\t\t%ld\t\t%s\t\t%s\t\t\t%.2f\n", c[i].nameLastname, c[i].dni, tipoSeguro, c[i].debitoAuto, c[i].cuotaMenusal);
 }
-
